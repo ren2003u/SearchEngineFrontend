@@ -48,3 +48,42 @@ export const ResultItem = styled.p`
   margin: 0;
   margin-bottom: 5px;
 `;
+
+export const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+`;
+
+export const PageButton = styled.button`
+  padding: 5px 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+
+  &:hover {
+    background-color: #e2e6ea;
+  }
+`;
+
+export const ModeButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
+
+export const ModeButton = styled.button`
+  padding: 10px 20px;
+  margin: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #e2e6ea;
+  }
+`;
