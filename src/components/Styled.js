@@ -80,10 +80,11 @@ export const ModeButton = styled.button`
   border: 1px solid #ccc;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #f8f9fa;
+  background-color: ${props => (props.active ? '#e2e6ea' : '#f8f9fa')}; // Change background based on active prop
   font-weight: bold;
+  transition: background-color 0.3s ease; // Smooth transition
 
   &:hover {
-    background-color: #e2e6ea;
+    background-color: ${props => (props.active ? '#d1d5d9' : '#e2e6ea')}; // Change hover color based on active prop
   }
 `;
