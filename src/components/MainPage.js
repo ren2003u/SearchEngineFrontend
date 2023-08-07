@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SearchBar, SearchButton, SearchContainer, ResultsContainer, ResultCard, ResultTitle, ResultDetails, ResultItem, PaginationContainer, PageButton, ModeButtons, ModeButton } from './Styled';
+import { SearchBar, SearchButton, SearchContainer, ResultsContainer, ResultCard, ResultTitle, ResultDetails, ResultItem, PaginationContainer, PageButton, ModeButtons, ModeButton, InstructionalText, JumpToPageInput, ConfirmButton } from './Styled';
 
 function MainPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -8,6 +8,7 @@ function MainPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [mode, setMode] = useState('nameSearch'); // Added mode state
     const resultsPerPage = 5;
+    const [jumpToPage, setJumpToPage] = useState(''); // State for jump to page input
   
     const handleSearch = async () => {
         if (!searchTerm.trim()) {
@@ -25,10 +26,40 @@ function MainPage() {
     setCurrentPage(pageNumber);
   };
 
+  const handleNextPage = () => {
+    if (currentPage < pageNumbers.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleJumpToPage = (event) => {
+    const pageNumber = parseInt(event.target.value);
+    if (pageNumber >= 1 && pageNumber <= pageNumbers.length) {
+      setCurrentPage(pageNumber);
+    }
+  };
+  const handleJumpToPageChange = (event) => {
+    setJumpToPage(event.target.value);
+  };
+
+  const handleJumpToPageConfirm = () => {
+    const pageNumber = parseInt(jumpToPage);
+    if (pageNumber >= 1 && pageNumber <= pageNumbers.length) {
+      setCurrentPage(pageNumber);
+    }
+  };
+
   const indexOfLastResult = currentPage * resultsPerPage;
   const indexOfFirstResult = indexOfLastResult - resultsPerPage;
   const currentResults = searchResults ? searchResults.slice(indexOfFirstResult, indexOfLastResult) : []; // Use correct variables
   const totalResults = searchResults ? searchResults.length : 0; // Handle null value
+
 
   const pageNumbers = [];
   if (searchResults) { // Check if searchResults is not null
@@ -36,6 +67,12 @@ function MainPage() {
       pageNumbers.push(i);
     }
   }
+  
+  const maxPageNumbersToShow = 5; // You can adjust this number
+  const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+  const endPage = Math.min(pageNumbers.length, startPage + maxPageNumbersToShow - 1);
+
+
 
   return (
     <div>
@@ -56,7 +93,7 @@ function MainPage() {
           {isCorrected && <p>Your search term was corrected.</p>}
           <ResultsContainer>
           {searchResults === null ? (
-              <p>Please enter a cartoon name to search.</p> // Message for empty search term
+          <InstructionalText>Please enter a cartoon name to search.</InstructionalText> // Updated instructional text
             ) : currentResults.length > 0 ? (
                 currentResults.map((result, index) => (
                     <ResultCard key={index}>
@@ -77,17 +114,23 @@ function MainPage() {
                     </ResultCard>
               ))
             ) : (
-              <p>No results found. Please try another name.</p> // Message for no results
+                <InstructionalText>No results found. Please try another name.</InstructionalText> // Updated instructional text
             )}
           </ResultsContainer>
           <PaginationContainer>
-            {totalResults > 0 && ( // Only show pagination if there are results
+            {totalResults > 0 && (
                 <PaginationContainer>
-                {pageNumbers.map(number => (
+                    <PageButton onClick={handlePreviousPage}>Previous</PageButton>
+                    {startPage > 1 && <span>...</span>}
+                    {pageNumbers.slice(startPage - 1, endPage).map(number => (
                     <PageButton key={number} onClick={() => handlePageChange(number)}>
-                    {number}
+                        {number}
                     </PageButton>
-                ))}
+                    ))}
+                    {endPage < pageNumbers.length && <span>...</span>}
+                    <PageButton onClick={handleNextPage}>Next</PageButton>
+                    <JumpToPageInput type="number" placeholder="Jump to page..." value={jumpToPage} onChange={handleJumpToPageChange} />
+                    <ConfirmButton onClick={handleJumpToPageConfirm}>Confirm</ConfirmButton> {/* Confirm button */}
                 </PaginationContainer>
             )}
           </PaginationContainer>
