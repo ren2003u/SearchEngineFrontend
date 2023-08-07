@@ -101,6 +101,10 @@ export const InstructionalText = styled.p`
   text-align: center;
   font-weight: bold;
   color: #555;
+  user-select: none; /* Add this line */
+  -webkit-user-select: none; /* Add this line */
+  -moz-user-select: none; /* Add this line */
+  -ms-user-select: none; /* Add this line */
 `;
 
 export const JumpToPageInput = styled.input`
@@ -122,4 +126,16 @@ export const ConfirmButton = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+`;
+
+export const AttributeContainer = styled.div`
+  // Define styles for the attribute container
+`;
+
+export const AttributeGroup = styled.div`
+  // Define styles for each attribute group
+`;
+
+export const AttributeItem = styled.span`
+  // Define styles for each attribute item
 `;

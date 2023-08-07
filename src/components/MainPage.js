@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SearchBar, SearchButton, SearchContainer, ResultsContainer, ResultCard, ResultTitle, ResultDetails, ResultItem, PaginationContainer, PageButton, ModeButtons, ModeButton, InstructionalText, JumpToPageInput, ConfirmButton } from './Styled';
-
+import AttributeFilterSearch from './AttributeFilterSearch';
 function MainPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -67,7 +67,7 @@ function MainPage() {
       pageNumbers.push(i);
     }
   }
-  
+
   const maxPageNumbersToShow = 5; // You can adjust this number
   const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
   const endPage = Math.min(pageNumbers.length, startPage + maxPageNumbersToShow - 1);
@@ -136,9 +136,7 @@ function MainPage() {
           </PaginationContainer>
         </>
       )}
-      {mode === 'attributeSearch' && (
-        <p>Attribute Filter Search coming soon!</p> // Placeholder for attribute filter search
-      )}
+      {mode === 'attributeSearch' && <AttributeFilterSearch />}
     </div>
   );
 }
