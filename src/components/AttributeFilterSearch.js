@@ -9,6 +9,8 @@ import {
     ToggleSearchButton,
     SelectedAttributesWindow,
     ShowSelectedButton,
+    Overlay,
+    Legend,
   } from './Styled';
 
 function AttributeFilterSearch() {
@@ -94,7 +96,13 @@ function AttributeFilterSearch() {
 
   return (
     <div>
+      <Legend>
+        <AttributeItem type="include">Included</AttributeItem>
+        <AttributeItem type="exclude">Excluded</AttributeItem>
+        <AttributeItem type="unselected">Unselected</AttributeItem>
+      </Legend>
       <ShowSelectedButton onClick={() => setShowSelectedWindow(!showSelectedWindow)}>Show Selected Attributes</ShowSelectedButton>
+      {showSelectedWindow && <Overlay onClick={() => setShowSelectedWindow(false)} />}
       <SelectedAttributesWindow show={showSelectedWindow}>
         <h3>Included Attributes:</h3>
         {Object.keys(selectedAttributes.include).map((key) => (

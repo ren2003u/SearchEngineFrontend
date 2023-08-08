@@ -209,16 +209,36 @@ export const SelectedAttributesWindow = styled.div`
 `;
 
 export const ShowSelectedButton = styled.button`
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: none;
-  background-color: #007BFF;
+  background-color: #4caf50;
   color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
   cursor: pointer;
-  margin: 10px 0;
-  transition: background-color 0.3s ease;
+  font-size: 16px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #45a049;
   }
+`;
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+`;
+
+export const Legend = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 `;
