@@ -182,11 +182,11 @@ export const SelectedAttributeItem = styled.span`
 
 export const AttributeItem = styled.span`
   display: inline-block;
-  border: 1px solid ${props => (props.type === 'include' ? '#007BFF' : props.type === 'exclude' ? '#FF0000' : '#ccc')};
+  border: 1px solid ${props => (props.type === 'include' ? '#007BFF' : props.type === 'exclude' ? '#FF0000' : '#ccc')}; // Changed color for 'include'
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
-  background-color: ${props => (props.type === 'include' ? '#f8f9fa' : props.type === 'exclude' ? '#ffe6e6' : '#f8f9fa')};
+  background-color: ${props => (props.type === 'include' ? '#c3e6cb' : props.type === 'exclude' ? '#ffe6e6' : '#f8f9fa')}; // Changed color for 'include'
   cursor: pointer;
 
   &:hover {
@@ -271,4 +271,13 @@ export const LegendWindow = styled.div`
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 2;
   display: ${({ show }) => (show ? 'block' : 'none')};
+`;
+
+export const UnselectableText = styled.h3`
+  user-select: none;
+`;
+
+export const EmptyListMessage = styled.p`
+  font-style: italic;
+  color: #7f8c8d;
 `;

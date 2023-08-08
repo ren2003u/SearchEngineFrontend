@@ -12,6 +12,9 @@ import {
     Overlay,
     LegendButton,
     LegendWindow,
+    UnselectableText,
+    EmptyListMessage,
+    SelectedAttributeItem,
   } from './Styled';
 
 function AttributeFilterSearch() {
@@ -88,7 +91,10 @@ function AttributeFilterSearch() {
     }));
   };
 
-  const handleAttributeToggle = (attributeKey, item, action) => {
+  const handleAttributeToggle = (attributeKey, item) => {
+    // Determine if the item is in the include or exclude list
+    const action = selectedAttributes.include[attributeKey]?.includes(item) ? 'include' : 'exclude';
+
     // Remove the item from the selected attributes
     setSelectedAttributes((prevSelected) => {
       const updatedAttributes = { ...prevSelected[action], [attributeKey]: (prevSelected[action][attributeKey] || []).filter((i) => i !== item) };
@@ -108,28 +114,32 @@ function AttributeFilterSearch() {
       <ShowSelectedButton onClick={() => setShowSelectedWindow(!showSelectedWindow)}>Show Selected Attributes</ShowSelectedButton>
       {showSelectedWindow && <Overlay onClick={() => setShowSelectedWindow(false)} />}
       <SelectedAttributesWindow show={showSelectedWindow}>
-        <h3>Included Attributes:</h3>
-        {Object.keys(selectedAttributes.include).map((key) => (
-          <div>
-            <h4>{key}</h4>
-            {selectedAttributes.include[key].map((item, index) => (
-              <AttributeItem key={index} type="include" onClick={() => handleAttributeToggle(key, item, 'include')}>
-                {item}
-              </AttributeItem>
-            ))}
-          </div>
-        ))}
-        <h3>Excluded Attributes:</h3>
-        {Object.keys(selectedAttributes.exclude).map((key) => (
-          <div>
-            <h4>{key}</h4>
-            {selectedAttributes.exclude[key].map((item, index) => (
-              <AttributeItem key={index} type="exclude" onClick={() => handleAttributeToggle(key, item, 'exclude')}>
-                {item}
-              </AttributeItem>
-            ))}
-          </div>
-        ))}
+        <UnselectableText>Included Attributes:</UnselectableText>
+            {Object.keys(selectedAttributes.include).length > 0 ? (
+            Object.keys(selectedAttributes.include).map((key) => (
+                <div>
+                <h4>{key}</h4>
+                {selectedAttributes.include[key].map((item, index) => (
+                    <SelectedAttributeItem key={index} type="include" onClick={() => handleAttributeToggle(key, item)}>{item}</SelectedAttributeItem> // Added onClick
+                ))}
+                </div>
+            ))
+            ) : (
+            <EmptyListMessage>No included attributes selected.</EmptyListMessage>
+            )}
+            <UnselectableText>Excluded Attributes:</UnselectableText>
+                {Object.keys(selectedAttributes.exclude).length > 0 ? (
+                    Object.keys(selectedAttributes.exclude).map((key) => (
+                    <div>
+                    <h4>{key}</h4>
+                    {selectedAttributes.exclude[key].map((item, index) => (
+                        <SelectedAttributeItem key={index} type="exclude" onClick={() => handleAttributeToggle(key, item)}>{item}</SelectedAttributeItem> // Added onClick
+                    ))}
+                    </div>
+                ))
+                ) : (
+            <EmptyListMessage>No excluded attributes selected.</EmptyListMessage>
+            )}
       </SelectedAttributesWindow>
       {Object.keys(attributes).map((attributeKey) => (
         <AttributeGroup key={attributeKey}>
