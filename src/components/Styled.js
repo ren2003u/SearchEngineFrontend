@@ -242,3 +242,33 @@ export const Legend = styled.div`
   flex-direction: column;
   gap: 5px;
 `;
+
+export const LegendButton = styled.button`
+  background-color: #f39c12;
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e67e22;
+  }
+`;
+
+export const LegendWindow = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  display: ${({ show }) => (show ? 'block' : 'none')};
+`;

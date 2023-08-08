@@ -10,7 +10,8 @@ import {
     SelectedAttributesWindow,
     ShowSelectedButton,
     Overlay,
-    Legend,
+    LegendButton,
+    LegendWindow,
   } from './Styled';
 
 function AttributeFilterSearch() {
@@ -40,6 +41,7 @@ function AttributeFilterSearch() {
     exclude: {},
   });
   const [showSelectedWindow, setShowSelectedWindow] = useState(false);
+  const [showLegendWindow, setShowLegendWindow] = useState(false);
   useEffect(() => {
     fetchAllAttributes();
   }, []);
@@ -96,11 +98,13 @@ function AttributeFilterSearch() {
 
   return (
     <div>
-      <Legend>
+      <LegendButton onClick={() => setShowLegendWindow(!showLegendWindow)}>Legend</LegendButton>
+      {showLegendWindow && <Overlay onClick={() => setShowLegendWindow(false)} />}
+      <LegendWindow show={showLegendWindow}>
         <AttributeItem type="include">Included</AttributeItem>
         <AttributeItem type="exclude">Excluded</AttributeItem>
         <AttributeItem type="unselected">Unselected</AttributeItem>
-      </Legend>
+      </LegendWindow>
       <ShowSelectedButton onClick={() => setShowSelectedWindow(!showSelectedWindow)}>Show Selected Attributes</ShowSelectedButton>
       {showSelectedWindow && <Overlay onClick={() => setShowSelectedWindow(false)} />}
       <SelectedAttributesWindow show={showSelectedWindow}>
