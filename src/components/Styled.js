@@ -170,27 +170,33 @@ export const SelectedAttributesContainer = styled.div`
   margin: 10px 0;
 `;
 
+export const AttributeItem = styled.span`
+  display: inline-block;
+  border: 1px solid ${props => (props.type === 'include' ? '#28a745' : props.type === 'exclude' ? '#FF0000' : '#ccc')};
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  background-color: ${props => (props.type === 'include' ? '#28a745' : props.type === 'exclude' ? '#FF0000' : '#f8f9fa')}; // Same color for border and fill
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e2e6ea;
+  }
+`;
+
 export const SelectedAttributeItem = styled.span`
   display: inline-block;
   border: 1px solid ${props => (props.type === 'include' ? '#28a745' : '#dc3545')};
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
-  background-color: ${props => (props.type === 'include' ? '#c3e6cb' : '#f5c6cb')};
+  background-color: ${props => (props.type === 'include' ? '#28a745' : '#dc3545')}; // Same color for border and fill
   color: ${props => (props.type === 'include' ? '#155724' : '#721c24')};
-`;
-
-export const AttributeItem = styled.span`
-  display: inline-block;
-  border: 1px solid ${props => (props.type === 'include' ? '#007BFF' : props.type === 'exclude' ? '#FF0000' : '#ccc')}; // Changed color for 'include'
-  border-radius: 5px;
-  padding: 5px;
-  margin: 5px;
-  background-color: ${props => (props.type === 'include' ? '#c3e6cb' : props.type === 'exclude' ? '#ffe6e6' : '#f8f9fa')}; // Changed color for 'include'
-  cursor: pointer;
+  cursor: pointer; // Hand cursor
+  transition: all 0.3s ease; // Added transition
 
   &:hover {
-    background-color: #e2e6ea;
+    transform: scale(1.05); // Slight enlargement
   }
 `;
 

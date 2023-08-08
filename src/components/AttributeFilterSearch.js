@@ -142,6 +142,7 @@ function AttributeFilterSearch() {
             )}
       </SelectedAttributesWindow>
       {Object.keys(attributes).map((attributeKey) => (
+        (selectedAttributes.include[attributeKey]?.length > 0 || selectedAttributes.exclude[attributeKey]?.length > 0 || attributes[attributeKey].length > 0) && ( // Check if attribute has elements
         <AttributeGroup key={attributeKey}>
           <h3>{attributeKey}</h3>
           <ToggleSearchButton onClick={() => toggleSearchBar(attributeKey)}>Search {attributeKey}</ToggleSearchButton>
@@ -169,6 +170,7 @@ function AttributeFilterSearch() {
             ))}
           </AttributeContainer>
         </AttributeGroup>
+      )
       ))}
     </div>
   );
