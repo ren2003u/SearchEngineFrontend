@@ -129,13 +129,43 @@ export const ConfirmButton = styled.button`
 `;
 
 export const AttributeContainer = styled.div`
-  // Define styles for the attribute container
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+  max-height: 200px;
+  overflow-y: scroll;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); // Added shadow for depth
 `;
 
 export const AttributeGroup = styled.div`
-  // Define styles for each attribute group
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); // Added shadow for a technological appearance
 `;
 
 export const AttributeItem = styled.span`
-  // Define styles for each attribute item
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  background-color: #f8f9fa;
+`;
+
+export const ToggleSearchButton = styled.button`
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
 `;
