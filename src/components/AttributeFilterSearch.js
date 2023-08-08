@@ -94,10 +94,12 @@ function AttributeFilterSearch() {
   const handleAttributeToggle = (attributeKey, item) => {
     // Determine if the item is in the include or exclude list
     const action = selectedAttributes.include[attributeKey]?.includes(item) ? 'include' : 'exclude';
-
+  
     // Remove the item from the selected attributes
     setSelectedAttributes((prevSelected) => {
-      const updatedAttributes = { ...prevSelected[action], [attributeKey]: (prevSelected[action][attributeKey] || []).filter((i) => i !== item) };
+      const updatedList = (prevSelected[action][attributeKey] || []).filter((i) => i !== item);
+      const updatedAttributes = { ...prevSelected[action], [attributeKey]: updatedList };
+      if (updatedList.length === 0) delete updatedAttributes[attributeKey]; // Remove attribute key if list is empty
       return { ...prevSelected, [action]: updatedAttributes };
     });
   };
@@ -141,8 +143,7 @@ function AttributeFilterSearch() {
             <EmptyListMessage>No excluded attributes selected.</EmptyListMessage>
             )}
       </SelectedAttributesWindow>
-      {Object.keys(attributes).map((attributeKey) => (
-        (selectedAttributes.include[attributeKey]?.length > 0 || selectedAttributes.exclude[attributeKey]?.length > 0 || attributes[attributeKey].length > 0) && ( // Check if attribute has elements
+      {Object.keys(attributes).map((attributeKey) => ( 
         <AttributeGroup key={attributeKey}>
           <h3>{attributeKey}</h3>
           <ToggleSearchButton onClick={() => toggleSearchBar(attributeKey)}>Search {attributeKey}</ToggleSearchButton>
@@ -170,7 +171,6 @@ function AttributeFilterSearch() {
             ))}
           </AttributeContainer>
         </AttributeGroup>
-      )
       ))}
     </div>
   );
