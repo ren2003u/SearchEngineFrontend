@@ -193,3 +193,32 @@ export const AttributeItem = styled.span`
     background-color: #e2e6ea;
   }
 `;
+
+export const SelectedAttributesWindow = styled.div`
+  position: fixed;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 20px;
+  overflow-y: scroll;
+  z-index: 1000; // Ensure it's above other elements
+  display: ${props => (props.show ? 'block' : 'none')}; // Show or hide based on prop
+`;
+
+export const ShowSelectedButton = styled.button`
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;

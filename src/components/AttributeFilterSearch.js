@@ -7,8 +7,8 @@ import {
     AttributeItem,
     SearchContainer,
     ToggleSearchButton,
-    SelectedAttributesContainer,
-    SelectedAttributeItem,
+    SelectedAttributesWindow,
+    ShowSelectedButton,
   } from './Styled';
 
 function AttributeFilterSearch() {
@@ -37,7 +37,7 @@ function AttributeFilterSearch() {
     include: {},
     exclude: {},
   });
-
+  const [showSelectedWindow, setShowSelectedWindow] = useState(false);
   useEffect(() => {
     fetchAllAttributes();
   }, []);
@@ -84,15 +84,26 @@ function AttributeFilterSearch() {
     }));
   };
 
+  const handleAttributeToggle = (attributeKey, item, action) => {
+    // Remove the item from the selected attributes
+    setSelectedAttributes((prevSelected) => {
+      const updatedAttributes = { ...prevSelected[action], [attributeKey]: (prevSelected[action][attributeKey] || []).filter((i) => i !== item) };
+      return { ...prevSelected, [action]: updatedAttributes };
+    });
+  };
+
   return (
     <div>
-      <SelectedAttributesContainer>
+      <ShowSelectedButton onClick={() => setShowSelectedWindow(!showSelectedWindow)}>Show Selected Attributes</ShowSelectedButton>
+      <SelectedAttributesWindow show={showSelectedWindow}>
         <h3>Included Attributes:</h3>
         {Object.keys(selectedAttributes.include).map((key) => (
           <div>
             <h4>{key}</h4>
             {selectedAttributes.include[key].map((item, index) => (
-              <SelectedAttributeItem key={index} type="include">{item}</SelectedAttributeItem>
+              <AttributeItem key={index} type="include" onClick={() => handleAttributeToggle(key, item, 'include')}>
+                {item}
+              </AttributeItem>
             ))}
           </div>
         ))}
@@ -101,11 +112,13 @@ function AttributeFilterSearch() {
           <div>
             <h4>{key}</h4>
             {selectedAttributes.exclude[key].map((item, index) => (
-              <SelectedAttributeItem key={index} type="exclude">{item}</SelectedAttributeItem>
+              <AttributeItem key={index} type="exclude" onClick={() => handleAttributeToggle(key, item, 'exclude')}>
+                {item}
+              </AttributeItem>
             ))}
           </div>
         ))}
-      </SelectedAttributesContainer>
+      </SelectedAttributesWindow>
       {Object.keys(attributes).map((attributeKey) => (
         <AttributeGroup key={attributeKey}>
           <h3>{attributeKey}</h3>
@@ -122,7 +135,7 @@ function AttributeFilterSearch() {
             </SearchContainer>
           )}
           <AttributeContainer>
-          {attributes[attributeKey].map((item, index) => (
+            {attributes[attributeKey].map((item, index) => (
               <AttributeItem
                 key={index}
                 type={selectedAttributes.include[attributeKey]?.includes(item) ? 'include' : selectedAttributes.exclude[attributeKey]?.includes(item) ? 'exclude' : 'unselected'}
