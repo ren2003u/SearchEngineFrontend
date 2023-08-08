@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { SearchBar, SearchButton, AttributeContainer, AttributeGroup, AttributeItem, SearchContainer, ToggleSearchButton } from './Styled'; // Import styled components
+import {
+    SearchBar,
+    SearchButton,
+    AttributeContainer,
+    AttributeGroup,
+    AttributeItem,
+    SearchContainer,
+    ToggleSearchButton,
+    SelectedAttributesContainer,
+    SelectedAttributeItem,
+  } from './Styled';
 
 function AttributeFilterSearch() {
   const [attributes, setAttributes] = useState({
@@ -23,26 +33,34 @@ function AttributeFilterSearch() {
     同人: false,
     標籤: false,
   });
+  const [selectedAttributes, setSelectedAttributes] = useState({
+    include: {},
+    exclude: {},
+  });
 
   useEffect(() => {
-    const fetchAttributes = async () => {
-      const attributeKeys = ['社團', '作者', '角色', '同人', '標籤'];
-      const newAttributes = {};
-
-      for (const key of attributeKeys) {
-        const response = await fetch(`http://localhost:8080/cartoons/listAttributeAllValues/${key}`);
-        const data = await response.json();
-        newAttributes[key] = data;
-      }
-
-      setAttributes(newAttributes);
-    };
-
-    fetchAttributes();
+    fetchAllAttributes();
   }, []);
+
+  const fetchAllAttributes = async () => {
+    const attributeKeys = ['社團', '作者', '角色', '同人', '標籤'];
+    const newAttributes = {};
+
+    for (const key of attributeKeys) {
+      const response = await fetch(`http://localhost:8080/cartoons/listAttributeAllValues/${key}`);
+      const data = await response.json();
+      newAttributes[key] = data;
+    }
+
+    setAttributes(newAttributes);
+  };
 
   const handleAttributeSearch = async (attribute) => {
     const query = searchQueries[attribute];
+    if (query === '') {
+      fetchAllAttributes(); // Fetch all attributes if the search bar is empty
+      return;
+    }
     const response = await fetch(`http://localhost:8080/cartoons/fuzzySearchAttributeValues/${attribute}/${query}`);
     const data = await response.json();
     setAttributes((prevAttributes) => ({
@@ -50,7 +68,15 @@ function AttributeFilterSearch() {
       [attribute]: data,
     }));
   };
+  const handleAttributeSelect = (attributeKey, item, action) => {
+    // Prevent duplicate selection
+    if (selectedAttributes.include[attributeKey]?.includes(item) || selectedAttributes.exclude[attributeKey]?.includes(item)) return;
 
+    setSelectedAttributes((prevSelected) => {
+      const updatedAttributes = { ...prevSelected[action], [attributeKey]: [...(prevSelected[action][attributeKey] || []), item] };
+      return { ...prevSelected, [action]: updatedAttributes };
+    });
+  };
   const toggleSearchBar = (attribute) => {
     setShowSearch((prevShowSearch) => ({
       ...prevShowSearch,
@@ -60,6 +86,26 @@ function AttributeFilterSearch() {
 
   return (
     <div>
+      <SelectedAttributesContainer>
+        <h3>Included Attributes:</h3>
+        {Object.keys(selectedAttributes.include).map((key) => (
+          <div>
+            <h4>{key}</h4>
+            {selectedAttributes.include[key].map((item, index) => (
+              <SelectedAttributeItem key={index} type="include">{item}</SelectedAttributeItem>
+            ))}
+          </div>
+        ))}
+        <h3>Excluded Attributes:</h3>
+        {Object.keys(selectedAttributes.exclude).map((key) => (
+          <div>
+            <h4>{key}</h4>
+            {selectedAttributes.exclude[key].map((item, index) => (
+              <SelectedAttributeItem key={index} type="exclude">{item}</SelectedAttributeItem>
+            ))}
+          </div>
+        ))}
+      </SelectedAttributesContainer>
       {Object.keys(attributes).map((attributeKey) => (
         <AttributeGroup key={attributeKey}>
           <h3>{attributeKey}</h3>
@@ -76,8 +122,15 @@ function AttributeFilterSearch() {
             </SearchContainer>
           )}
           <AttributeContainer>
-            {attributes[attributeKey].map((item, index) => (
-              <AttributeItem key={index}>{item}</AttributeItem>
+          {attributes[attributeKey].map((item, index) => (
+              <AttributeItem
+                key={index}
+                type={selectedAttributes.include[attributeKey]?.includes(item) ? 'include' : selectedAttributes.exclude[attributeKey]?.includes(item) ? 'exclude' : 'unselected'}
+                onClick={() => handleAttributeSelect(attributeKey, item, 'include')}
+                onContextMenu={(e) => { e.preventDefault(); handleAttributeSelect(attributeKey, item, 'exclude'); }}
+              >
+                {item}
+              </AttributeItem>
             ))}
           </AttributeContainer>
         </AttributeGroup>
@@ -85,5 +138,6 @@ function AttributeFilterSearch() {
     </div>
   );
 }
+
 
 export default AttributeFilterSearch;

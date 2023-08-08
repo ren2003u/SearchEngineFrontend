@@ -145,16 +145,6 @@ export const AttributeGroup = styled.div`
   margin: 20px 0;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); // Added shadow for a technological appearance
 `;
-
-export const AttributeItem = styled.span`
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px;
-  margin: 5px;
-  background-color: #f8f9fa;
-`;
-
 export const ToggleSearchButton = styled.button`
   padding: 10px 20px;
   border-radius: 5px;
@@ -167,5 +157,39 @@ export const ToggleSearchButton = styled.button`
 
   &:hover {
     background-color: #0056b3;
+  }
+`;
+export const SelectedAttributesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-height: 200px; // Fixed height to enable scrolling
+  overflow-y: scroll; // Vertical scroll bar
+  border: 2px solid #007BFF;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+`;
+
+export const SelectedAttributeItem = styled.span`
+  display: inline-block;
+  border: 1px solid ${props => (props.type === 'include' ? '#28a745' : '#dc3545')};
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  background-color: ${props => (props.type === 'include' ? '#c3e6cb' : '#f5c6cb')};
+  color: ${props => (props.type === 'include' ? '#155724' : '#721c24')};
+`;
+
+export const AttributeItem = styled.span`
+  display: inline-block;
+  border: 1px solid ${props => (props.type === 'include' ? '#007BFF' : props.type === 'exclude' ? '#FF0000' : '#ccc')};
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+  background-color: ${props => (props.type === 'include' ? '#f8f9fa' : props.type === 'exclude' ? '#ffe6e6' : '#f8f9fa')};
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e2e6ea;
   }
 `;
