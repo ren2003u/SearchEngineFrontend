@@ -21,6 +21,10 @@ import {
     ResultDetails,
     ResultItem,
     InstructionalText,
+    JumpToPageInput, 
+    ConfirmButton,
+    PaginationContainer, 
+    PageButton
   } from './Styled';
 
 function AttributeFilterSearch() {
@@ -52,6 +56,8 @@ function AttributeFilterSearch() {
   const [showSelectedWindow, setShowSelectedWindow] = useState(false);
   const [showLegendWindow, setShowLegendWindow] = useState(false);
   const [cartoons, setCartoons] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [jumpToPage, setJumpToPage] = useState('');
   useEffect(() => {
     fetchAllAttributes();
   }, []);
@@ -139,7 +145,48 @@ function AttributeFilterSearch() {
     } catch (error) {
         console.error("Error fetching cartoons:", error);
     }
+  };
+const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
 };
+
+const handleNextPage = () => {
+    if (currentPage < pageNumbers.length) {
+        setCurrentPage(currentPage + 1);
+    }
+};
+
+const handlePreviousPage = () => {
+    if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+    }
+};
+
+const handleJumpToPageChange = (event) => {
+    setJumpToPage(event.target.value);
+};
+
+const handleJumpToPageConfirm = () => {
+    const pageNumber = parseInt(jumpToPage);
+    if (pageNumber >= 1 && pageNumber <= pageNumbers.length) {
+        setCurrentPage(pageNumber);
+    }
+};
+
+const resultsPerPage = 5;
+const indexOfLastResult = currentPage * resultsPerPage;
+const indexOfFirstResult = indexOfLastResult - resultsPerPage;
+const currentCartoonResults = cartoons.slice(indexOfFirstResult, indexOfLastResult);
+
+const totalNumberOfPages = Math.ceil(cartoons.length / resultsPerPage);
+const pageNumbers = [];
+for (let i = 1; i <= Math.ceil(cartoons.length / resultsPerPage); i++) {
+    pageNumbers.push(i);
+}
+
+const maxPageNumbersToShow = 5;
+const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+const endPage = Math.min(totalNumberOfPages, startPage + maxPageNumbersToShow - 1);
 
   return (
     <div>
@@ -181,8 +228,8 @@ function AttributeFilterSearch() {
             )}
             <button onClick={handleSearchByAttributes}>Search Cartoons by Attributes</button>
                 <ResultsContainer>
-                    {cartoons.length > 0 ? (
-                        cartoons.map((result, index) => (
+                    {currentCartoonResults.length > 0 ? (
+                        currentCartoonResults.map((result, index) => (
                             <ResultCard key={index}>
                                 <ResultTitle>{result.transliterationTitle}</ResultTitle>
                                 <ResultDetails>
@@ -203,6 +250,23 @@ function AttributeFilterSearch() {
                         <InstructionalText>No cartoons found based on selected attributes.</InstructionalText>
                     )}
                 </ResultsContainer>
+                <PaginationContainer>
+                    {cartoons.length > 0 && (
+                        <>
+                            <PageButton onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</PageButton>
+                            {startPage > 1 && <span>...</span>}
+                            {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map(number => (
+                                <PageButton key={number} onClick={() => handlePageChange(number)}>
+                                    {number}
+                                </PageButton>
+                            ))}
+                            {endPage < totalNumberOfPages && <span>...</span>}
+                            <PageButton onClick={handleNextPage} disabled={currentPage === totalNumberOfPages}>Next</PageButton>
+                            <JumpToPageInput type="number" placeholder="Jump to page..." value={jumpToPage} onChange={handleJumpToPageChange} />
+                            <ConfirmButton onClick={handleJumpToPageConfirm}>Confirm</ConfirmButton>
+                        </>
+                    )}
+                </PaginationContainer>
       </SelectedAttributesWindow>
       {Object.keys(attributes).map((attributeKey) => ( 
         <AttributeGroup key={attributeKey}>
