@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SearchBar, SearchButton, SearchContainer, ResultsContainer, ResultCard, ResultTitle, ResultDetails, ResultItem, PaginationContainer, PageButton, ModeButtons, ModeButton, InstructionalText, JumpToPageInput, ConfirmButton } from './Styled';
+import { MainContent,LanguageButton,NavBar, NavButtons,Logo,SearchBar, SearchButton, SearchContainer, ResultsContainer, ResultCard, ResultTitle, ResultDetails, ResultItem, PaginationContainer, PageButton, ModeButtons, ModeButton, InstructionalText, JumpToPageInput, ConfirmButton } from './Styled';
 import AttributeFilterSearch from './AttributeFilterSearch';
 function MainPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -9,6 +9,7 @@ function MainPage() {
     const [mode, setMode] = useState('nameSearch'); // Added mode state
     const resultsPerPage = 5;
     const [jumpToPage, setJumpToPage] = useState(''); // State for jump to page input
+    const logoPlaceholder = "path_to_your_logo_image";
   
     const handleSearch = async () => {
         if (!searchTerm.trim()) {
@@ -76,11 +77,16 @@ function MainPage() {
 
   return (
     <div>
-      <ModeButtons>
-        <ModeButton active={mode === 'nameSearch'} onClick={() => setMode('nameSearch')}>Name Search</ModeButton>
-        <ModeButton active={mode === 'attributeSearch'} onClick={() => setMode('attributeSearch')}>Attribute Filter Search</ModeButton>
-      </ModeButtons>
-      {mode === 'nameSearch' && ( // Added conditional rendering based on mode
+            <NavBar>
+                <Logo src="path_to_your_logo_image.png" alt="Your Logo" />
+                <NavButtons>
+                    <ModeButton active={mode === 'nameSearch'} onClick={() => setMode('nameSearch')}>Name Search</ModeButton>
+                    <ModeButton active={mode === 'attributeSearch'} onClick={() => setMode('attributeSearch')}>Attribute Filter Search</ModeButton>
+                    <LanguageButton>Change Language</LanguageButton>
+                </NavButtons>
+            </NavBar>
+            <MainContent>
+            {mode === 'nameSearch' && ( // Added conditional rendering based on mode
         <>
           <SearchContainer>
             <SearchBar 
@@ -137,6 +143,7 @@ function MainPage() {
         </>
       )}
       {mode === 'attributeSearch' && <AttributeFilterSearch />}
+            </MainContent>
     </div>
   );
 }

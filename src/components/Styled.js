@@ -5,7 +5,9 @@ export const SearchContainer = styled.div`
   justify-content: flex-start;
   padding: 20px;
 `;
-
+export const MainContent = styled.div`
+    padding-top: 80px; // Adjust this value based on the height of your NavBar
+`;
 export const SearchBar = styled.input`
   flex: 1;
   padding: 10px;
@@ -77,21 +79,56 @@ export const ModeButtons = styled.div`
 `;
 
 export const ModeButton = styled.button`
-  padding: 10px 20px;
-  margin: 0 10px;
-  border: 2px solid #007BFF; // Enhanced border
-  border-radius: 10px; // Rounded corners
-  cursor: pointer;
-  background-color: ${props => (props.active ? '#007BFF' : 'transparent')}; // Change background based on active prop
-  color: ${props => (props.active ? '#ffffff' : '#007BFF')}; // Change text color
-  font-weight: bold;
-  font-size: 16px; // Increased font size
-  transition: all 0.3s ease; // Smooth transition
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: ${props => (props.active ? '#007BFF' : 'transparent')};
+    color: ${props => (props.active ? '#ffffff' : '#007BFF')};
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
 
-  &:hover {
-    background-color: ${props => (props.active ? '#0056b3' : '#e2e6ea')}; // Change hover color based on active prop
-    color: #ffffff; // Change text color on hover
-  }
+    &:hover {
+        background-color: ${props => (props.active ? '#0056b3' : '#e2e6ea')};
+        color: #ffffff;
+    }
+`;
+export const LanguageButton = styled.button`
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 16px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+`;
+export const NavBar = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+`;
+export const Logo = styled.img`
+    height: 50px;
+    width: auto;
+`;
+
+export const NavButtons = styled.div`
+    display: flex;
+    gap: 10px;
 `;
 
 export const InstructionalText = styled.p`
