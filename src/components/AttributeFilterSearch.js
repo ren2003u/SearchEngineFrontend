@@ -15,6 +15,12 @@ import {
     UnselectableText,
     EmptyListMessage,
     SelectedAttributeItem,
+    ResultsContainer,
+    ResultCard,
+    ResultTitle,
+    ResultDetails,
+    ResultItem,
+    InstructionalText,
   } from './Styled';
 
 function AttributeFilterSearch() {
@@ -45,6 +51,7 @@ function AttributeFilterSearch() {
   });
   const [showSelectedWindow, setShowSelectedWindow] = useState(false);
   const [showLegendWindow, setShowLegendWindow] = useState(false);
+  const [cartoons, setCartoons] = useState([]);
   useEffect(() => {
     fetchAllAttributes();
   }, []);
@@ -103,6 +110,36 @@ function AttributeFilterSearch() {
       return { ...prevSelected, [action]: updatedAttributes };
     });
   };
+  const handleSearchByAttributes = async () => {
+    // Clear previous results
+    setCartoons([]);
+
+    // Check if both include and exclude lists are empty
+    if (Object.keys(selectedAttributes.include).length === 0 && Object.keys(selectedAttributes.exclude).length === 0) {
+        return; // Exit the function if both lists are empty
+    }
+
+    // Construct the request body
+    const requestBody = {
+        includeAttributes: selectedAttributes.include,
+        excludeAttributes: selectedAttributes.exclude,
+    };
+
+    try {
+        const response = await fetch('http://localhost:8080/cartoons/attributeSearch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        const data = await response.json();
+        setCartoons(data);
+    } catch (error) {
+        console.error("Error fetching cartoons:", error);
+    }
+};
 
   return (
     <div>
@@ -142,6 +179,30 @@ function AttributeFilterSearch() {
                 ) : (
             <EmptyListMessage>No excluded attributes selected.</EmptyListMessage>
             )}
+            <button onClick={handleSearchByAttributes}>Search Cartoons by Attributes</button>
+                <ResultsContainer>
+                    {cartoons.length > 0 ? (
+                        cartoons.map((result, index) => (
+                            <ResultCard key={index}>
+                                <ResultTitle>{result.transliterationTitle}</ResultTitle>
+                                <ResultDetails>
+                                    <ResultItem><strong>Japanese Title:</strong> {result.japaneseTitle}</ResultItem>
+                                    <ResultItem><strong>Cartoon ID:</strong> {result.cartoonId}</ResultItem>
+                                    <ResultItem><strong>社團:</strong> {result.社團 ? result.社團.join(', ') : 'N/A'}</ResultItem>
+                                    <ResultItem><strong>作者:</strong> {result.作者 ? result.作者.join(', ') : 'N/A'}</ResultItem>
+                                    <ResultItem><strong>角色:</strong> {result.角色 ? result.角色.join(', ') : 'N/A'}</ResultItem>
+                                    <ResultItem><strong>同人:</strong> {result.同人 ? result.同人.join(', ') : 'N/A'}</ResultItem>
+                                    <ResultItem><strong>分類:</strong> {result.分類 ? result.分類.join(', ') : 'N/A'}</ResultItem>
+                                    <ResultItem><strong>語言:</strong> {result.語言 ? result.語言.join(', ') : 'N/A'}</ResultItem>
+                                    <ResultItem><strong>頁數:</strong> {result.頁數 ? result.頁數.join(', ') : 'N/A'}</ResultItem>
+                                    <ResultItem><strong>標籤:</strong> {result.標籤 ? result.標籤.join(', ') : 'N/A'}</ResultItem>
+                                </ResultDetails>
+                            </ResultCard>
+                        ))
+                    ) : (
+                        <InstructionalText>No cartoons found based on selected attributes.</InstructionalText>
+                    )}
+                </ResultsContainer>
       </SelectedAttributesWindow>
       {Object.keys(attributes).map((attributeKey) => ( 
         <AttributeGroup key={attributeKey}>
