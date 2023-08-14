@@ -27,7 +27,7 @@ import {
     PageButton
   } from './Styled';
 
-function AttributeFilterSearch() {
+function AttributeFilterSearch({ language }) {
   const [attributes, setAttributes] = useState({
     社團: [],
     作者: [],
@@ -88,6 +88,30 @@ function AttributeFilterSearch() {
       [attribute]: data,
     }));
   };
+  const translations = {
+    english: {
+        legend: "Legend",
+        showSelectedAttributes: "Show Selected Attributes",
+        includedAttributes: "Included Attributes:",
+        excludedAttributes: "Excluded Attributes:",
+        noIncludedAttributes: "No included attributes selected.",
+        noExcludedAttributes: "No excluded attributes selected.",
+        searchCartoons: "Search Cartoons by Attributes",
+        noCartoonsFound: "No cartoons found based on selected attributes.",
+        searchAttribute: "Search"
+    },
+    chinese: {
+        legend: "图例",
+        showSelectedAttributes: "显示选定的属性",
+        includedAttributes: "包括的属性：",
+        excludedAttributes: "排除的属性：",
+        noIncludedAttributes: "未选择包括的属性。",
+        noExcludedAttributes: "未选择排除的属性。",
+        searchCartoons: "按属性搜索动画",
+        noCartoonsFound: "未根据选定的属性找到动画。",
+        searchAttribute: "搜索"
+    }
+};
   const handleAttributeSelect = (attributeKey, item, action) => {
     // Prevent duplicate selection
     if (selectedAttributes.include[attributeKey]?.includes(item) || selectedAttributes.exclude[attributeKey]?.includes(item)) return;
@@ -190,14 +214,14 @@ const endPage = Math.min(totalNumberOfPages, startPage + maxPageNumbersToShow - 
 
   return (
     <div>
-      <LegendButton onClick={() => setShowLegendWindow(!showLegendWindow)}>Legend</LegendButton>
+      <LegendButton onClick={() => setShowLegendWindow(!showLegendWindow)}>{translations[language].legend}</LegendButton>
       {showLegendWindow && <Overlay onClick={() => setShowLegendWindow(false)} />}
       <LegendWindow show={showLegendWindow}>
         <AttributeItem type="include">Included</AttributeItem>
         <AttributeItem type="exclude">Excluded</AttributeItem>
         <AttributeItem type="unselected">Unselected</AttributeItem>
       </LegendWindow>
-      <ShowSelectedButton onClick={() => setShowSelectedWindow(!showSelectedWindow)}>Show Selected Attributes</ShowSelectedButton>
+      <ShowSelectedButton onClick={() => setShowSelectedWindow(!showSelectedWindow)}>{translations[language].showSelectedAttributes}</ShowSelectedButton>
       {showSelectedWindow && <Overlay onClick={() => setShowSelectedWindow(false)} />}
       <SelectedAttributesWindow show={showSelectedWindow}>
         <UnselectableText>Included Attributes:</UnselectableText>
@@ -271,7 +295,7 @@ const endPage = Math.min(totalNumberOfPages, startPage + maxPageNumbersToShow - 
       {Object.keys(attributes).map((attributeKey) => ( 
         <AttributeGroup key={attributeKey}>
           <h3>{attributeKey}</h3>
-          <ToggleSearchButton onClick={() => toggleSearchBar(attributeKey)}>Search {attributeKey}</ToggleSearchButton>
+          <ToggleSearchButton onClick={() => toggleSearchBar(attributeKey)}>{translations[language].searchAttribute} {attributeKey}</ToggleSearchButton>
           {showSearch[attributeKey] && (
             <SearchContainer>
               <SearchBar

@@ -9,7 +9,32 @@ function MainPage() {
     const [mode, setMode] = useState('nameSearch'); // Added mode state
     const resultsPerPage = 5;
     const [jumpToPage, setJumpToPage] = useState(''); // State for jump to page input
-    const logoPlaceholder = "path_to_your_logo_image";
+    const [language, setLanguage] = useState('english');
+    const toggleLanguage = () => {
+      if (language === 'english') {
+          setLanguage('chinese');
+      } else {
+          setLanguage('english');
+      }
+    };
+    const translations = {
+      english: {
+          nameSearch: "Name Search",
+          attributeSearch: "Attribute Filter Search",
+          changeLanguage: "Change Language",
+          enterCartoonName: "Please enter a cartoon name to search.",
+          correctedSearch: "Your search term was corrected.",
+          noResults: "No results found. Please try another name."
+      },
+      chinese: {
+          nameSearch: "名称搜索",
+          attributeSearch: "属性筛选搜索",
+          changeLanguage: "更改语言",
+          enterCartoonName: "请输入要搜索的动画名称。",
+          correctedSearch: "您的搜索词已被更正。",
+          noResults: "未找到结果。 请尝试其他名称。"
+      }
+  };
   
     const handleSearch = async () => {
         if (!searchTerm.trim()) {
@@ -80,9 +105,9 @@ function MainPage() {
             <NavBar>
                 <Logo src="path_to_your_logo_image.png" alt="Your Logo" />
                 <NavButtons>
-                    <ModeButton active={mode === 'nameSearch'} onClick={() => setMode('nameSearch')}>Name Search</ModeButton>
-                    <ModeButton active={mode === 'attributeSearch'} onClick={() => setMode('attributeSearch')}>Attribute Filter Search</ModeButton>
-                    <LanguageButton>Change Language</LanguageButton>
+                    <ModeButton active={mode === 'nameSearch'} onClick={() => setMode('nameSearch')}>{translations[language].nameSearch}</ModeButton>
+                    <ModeButton active={mode === 'attributeSearch'} onClick={() => setMode('attributeSearch')}>{translations[language].attributeSearch}</ModeButton>
+                    <LanguageButton onClick={toggleLanguage}>{translations[language].changeLanguage}</LanguageButton>
                 </NavButtons>
             </NavBar>
             <MainContent>
@@ -96,10 +121,10 @@ function MainPage() {
             />
             <SearchButton onClick={handleSearch}>Search</SearchButton>
           </SearchContainer>
-          {isCorrected && <p>Your search term was corrected.</p>}
+          {isCorrected && <p>{translations[language].correctedSearch}</p>}
           <ResultsContainer>
           {searchResults === null ? (
-          <InstructionalText>Please enter a cartoon name to search.</InstructionalText> // Updated instructional text
+          <InstructionalText>{translations[language].enterCartoonName}</InstructionalText> // Updated instructional text
             ) : currentResults.length > 0 ? (
                 currentResults.map((result, index) => (
                     <ResultCard key={index}>
@@ -120,7 +145,7 @@ function MainPage() {
                     </ResultCard>
               ))
             ) : (
-                <InstructionalText>No results found. Please try another name.</InstructionalText> // Updated instructional text
+              <InstructionalText>{translations[language].noResults}</InstructionalText> // Updated instructional text
             )}
           </ResultsContainer>
           <PaginationContainer>
@@ -142,7 +167,7 @@ function MainPage() {
           </PaginationContainer>
         </>
       )}
-      {mode === 'attributeSearch' && <AttributeFilterSearch />}
+      {mode === 'attributeSearch' && <AttributeFilterSearch language={language} />}
             </MainContent>
     </div>
   );
