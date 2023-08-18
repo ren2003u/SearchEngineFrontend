@@ -103,7 +103,7 @@ function MainPage() {
   return (
     <div>
             <NavBar>
-                <Logo src="path_to_your_logo_image.png" alt="Your Logo" />
+                <Logo src="D:\SearchHelperFrontend\mysearchengine\maxresdefault.jpg" alt="Your Logo" />
                 <NavButtons>
                     <ModeButton active={mode === 'nameSearch'} onClick={() => setMode('nameSearch')}>{translations[language].nameSearch}</ModeButton>
                     <ModeButton active={mode === 'attributeSearch'} onClick={() => setMode('attributeSearch')}>{translations[language].attributeSearch}</ModeButton>
@@ -128,6 +128,7 @@ function MainPage() {
             ) : currentResults.length > 0 ? (
                 currentResults.map((result, index) => (
                     <ResultCard key={index}>
+                      <img src={result.imageUrl} alt={result.transliterationTitle} referrerPolicy="no-referrer" style={{ width: '100px', height: '150px' }} />
                       <ResultTitle>{result.transliterationTitle}</ResultTitle>
                       <ResultDetails>
                         <ResultItem><strong>Japanese Title:</strong> {result.japaneseTitle}</ResultItem>

@@ -255,6 +255,7 @@ const endPage = Math.min(totalNumberOfPages, startPage + maxPageNumbersToShow - 
                     {currentCartoonResults.length > 0 ? (
                         currentCartoonResults.map((result, index) => (
                             <ResultCard key={index}>
+                              <img src={result.imageUrl} alt={result.transliterationTitle} referrerPolicy="no-referrer" style={{ width: '100px', height: '150px' }} />
                                 <ResultTitle>{result.transliterationTitle}</ResultTitle>
                                 <ResultDetails>
                                     <ResultItem><strong>Japanese Title:</strong> {result.japaneseTitle}</ResultItem>
