@@ -103,7 +103,7 @@ function MainPage() {
   return (
     <div>
             <NavBar>
-                <Logo src="D:\SearchHelperFrontend\mysearchengine\maxresdefault.jpg" alt="Your Logo" />
+            <Logo src="/logo.jpg" alt="Your Logo" />
                 <NavButtons>
                     <ModeButton active={mode === 'nameSearch'} onClick={() => setMode('nameSearch')}>{translations[language].nameSearch}</ModeButton>
                     <ModeButton active={mode === 'attributeSearch'} onClick={() => setMode('attributeSearch')}>{translations[language].attributeSearch}</ModeButton>
